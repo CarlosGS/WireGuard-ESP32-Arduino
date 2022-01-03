@@ -29,10 +29,9 @@ static uint8_t wireguard_peer_index = WIREGUARDIF_INVALID_INDEX;
 
 #define TAG "[WireGuard] "
 
-bool WireGuard::begin(const IPAddress& localIP, const char* privateKey, const char* remotePeerAddress, const char* remotePeerPublicKey, uint16_t remotePeerPort) {
+bool WireGuard::begin(const ip_addr_t localIP, const char* privateKey, const char* remotePeerAddress, const char* remotePeerPublicKey, uint16_t remotePeerPort) {
 	struct wireguardif_init_data wg;
 	struct wireguardif_peer peer;
-	ip_addr_t ipaddr = IPADDR4_INIT(static_cast<uint32_t>(localIP));
 	ip_addr_t netmask = IPADDR4_INIT_BYTES(255, 255, 255, 255);
 	ip_addr_t gateway = IPADDR4_INIT_BYTES(0, 0, 0, 0);
 
@@ -81,7 +80,7 @@ bool WireGuard::begin(const IPAddress& localIP, const char* privateKey, const ch
 		return false;
 	}
 	// Register the new WireGuard network interface with lwIP
-	wg_netif = netif_add(&wg_netif_struct, ip_2_ip4(&ipaddr), ip_2_ip4(&netmask), ip_2_ip4(&gateway), &wg, &wireguardif_init, &ip_input);
+	wg_netif = netif_add(&wg_netif_struct, ip_2_ip4(&localIP), ip_2_ip4(&netmask), ip_2_ip4(&gateway), &wg, &wireguardif_init, &ip_input);
 	if( wg_netif == nullptr ) {
 		log_e(TAG "failed to initialize WG netif.");
 		return false;

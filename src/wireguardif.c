@@ -133,7 +133,7 @@ static err_t wireguardif_output_to_peer(struct netif *netif, struct pbuf *q, con
 			// The IP packet consists of 16 byte header (struct message_transport_data), data padded upto 16 byte boundary + encrypted auth tag (16 bytes)
 			pbuf = pbuf_alloc(PBUF_TRANSPORT, header_len + padded_len + WIREGUARD_AUTHTAG_LEN, PBUF_RAM);
 			if (pbuf) {
-				log_v(TAG "preparing transport data...");
+				//log_v(TAG "preparing transport data...");
 				// Note: allocating pbuf from RAM above guarantees that the pbuf is in one section and not chained
 				// - i.e payload points to the contiguous memory region
 				memset(pbuf->payload, 0, pbuf->tot_len);
